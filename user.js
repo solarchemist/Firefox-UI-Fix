@@ -28,7 +28,8 @@ user_pref("browser.newtabpage.activity-stream.improvesearch.handoffToAwesomebar"
 
 // ** Useful Options ***********************************************************
 // Integrated calculator at urlbar
-user_pref("browser.urlbar.suggest.calculator", true);
+// I have rofi-calc, don't need this
+// user_pref("browser.urlbar.suggest.calculator", true);
 
 // Integrated unit convertor at urlbar
 // user_pref("browser.urlbar.unitConversion.enabled", true);
@@ -36,6 +37,8 @@ user_pref("browser.urlbar.suggest.calculator", true);
 // ** Scrolling Options ********************************************************
 // based on natural smooth scrolling v2 by aveyo
 // this preset will reset couple extra variables for consistency
+// I cannot honestly tell the difference with or without these settings. So I disabled them.
+/*
 //         Pref                                              Value                 Original
 user_pref("apz.allow_zooming",                               true);            ///     true
 user_pref("apz.force_disable_desktop_zooming_scrollbars",   false);            ///    false
@@ -78,3 +81,4 @@ user_pref("mousewheel.system_scroll_override_on_root_content.enabled", false); /
 user_pref("mousewheel.transaction.timeout",                  1500);            ///     1500
 user_pref("toolkit.scrollbox.horizontalScrollDistance",         4);            ///        5
 user_pref("toolkit.scrollbox.verticalScrollDistance",           3);            ///        3
+*/
