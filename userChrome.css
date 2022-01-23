@@ -1942,6 +1942,7 @@
   }
 
   /* None exist favicon - Size bigger */
+  /* Looking to get favicons back, I tried disabled this block. Did not work. */
   .tabbrowser-tab:not([image]) .tab-icon-overlay:not([pinned], [sharing], [crashed]) {
     transform: translateX(-0.5px) translateY(-1px);
     inset-inline-end: 0 !important;
@@ -1951,6 +1952,13 @@
   .tabbrowser-tab:not([image]):is([soundplaying], [muted], [activemedia-blocked]) .tab-icon-image:not([pinned]) {
     opacity: 0 !important; /* Favicon hidden */
   }
+
+  /* I miss favicons in the tabs. This version of the theme appears to have disabled them.
+  I applied the following, but did not get favicons, instead got a globe symbol in every tab
+  https://github.com/black7375/Firefox-UI-Fix/wiki/Tips#always-show-tab-icon
+  .tab-icon-image:not([src], [pinned], [crashed], [busy]) {
+    display: -moz-inline-box !important;
+  } */
 
   /* Busy - Show */
   .tab-throbber[busy],
