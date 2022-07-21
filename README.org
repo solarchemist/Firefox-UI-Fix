@@ -12,9 +12,22 @@
   - [[#why-proton][WHY Proton?]]
   - [[#why-not-proton][WHY Not Proton?]]
   - [[#padding-comparisons][Padding Comparisons]]
+  - [[#contributors][Contributors]]
   - [[#faq][FAQ]]
 :END:
 
+-----
+
+🔔🔔 Did you set a custom, but not work?
+
+You should copy [[./user.js][ ~user.js~ ]] file before the theme works.
+
+The option system depends on user configuration, and nothing applies without settings. \\
+Also, real-time changes are difficult for [[./docs/Restrictions.md#supports][technical limitations]] and require restarts.
+
+Some settings [[https://github.com/black7375/Firefox-UI-Fix/wiki/Options#using-userjs][can be conflict]] and should be explicitly =false=.
+
+-----
 
 ** Introduction
   [[https://wiki.mozilla.org/Firefox/Proton][Proton]] is Firefox's new design, starting from Firefox 89. \\
@@ -24,12 +37,14 @@
   That's why this project was born, and Lepton to denote light theme layer.
 
   /Disclaimer:/ It works on *Firefox 89* and above!!
-  | *Wiki*      |                               |      | |
-  | [[https://github.com/black7375/Firefox-UI-Fix/wiki/Installation-Guide][Installation Guide]] | [[https://github.com/black7375/Firefox-UI-Fix/wiki/Screenshots][Screenshots]] | [[https://github.com/black7375/Firefox-UI-Fix/wiki/Compatibility-Issues-Solution][Compatibility Issues Solution]] | [[https://github.com/black7375/Firefox-UI-Fix/wiki/Tips][Tips]] |
+  | *Wiki*             |             |         |                               |      |
+  | [[https://github.com/black7375/Firefox-UI-Fix/wiki/Installation-Guide][Installation Guide]] | [[https://github.com/black7375/Firefox-UI-Fix/wiki/Screenshots][Screenshots]] | [[https://github.com/black7375/Firefox-UI-Fix/wiki/Options][Options]] | [[https://github.com/black7375/Firefox-UI-Fix/wiki/Compatibility-Issues-Solution][Compatibility Issues Solution]] | [[https://github.com/black7375/Firefox-UI-Fix/wiki/Tips][Tips]] |
 
   [[https://user-images.githubusercontent.com/25581533/119774062-20942280-beb1-11eb-80aa-c18dd52f18d7.png]]
 
  (Lepton's design :arrow_up:)
+
+  @@html:<details>@@@@html:<summary>@@ *Feature List (Click)* @@html:</summary>@@
 
   - *Color*
     - Default light/dark theme contrast enhancement
@@ -37,12 +52,14 @@
     - More dark mode support
     - GTK system theme support
     - Windows system theme support
+    - Mac system theme support
     - Windows7 compatibility
   - *Icons*
     - Panel
     - Context Menu
     - Global Menu
     - Library's open context
+    - Video Player
   - *Padding Narrower*
     - Tab
     - Panel
@@ -59,12 +76,15 @@
       - Adjust Color: Easily recognizable.
     - Unselect:
       - Divide Line: React to hover like chrome
+    - Unloaded:
+      - Dimmed: Looks like inactive
     - Clipped:
       - Clearer Text: Adjusted clipped gradation
       - Closed Button: Visible on hover
     - Sound:
       - Remove Second Label
       - Show Favicon: Always show favicon
+      - PIP Icon
     - Container Tab:
       - Highlight line position: Displayed under tab.
   - *Button Design*
@@ -77,10 +97,17 @@
       - Size: Fill(Changes dynamically to your size)
   - *Error Page Design*
     - Illustrations: Restore error page illustrations
+  - *Video Player*
+    - Background Style
+    - Size at fullscreen
+  - *Fullscreen*
+    - Overlap mode
   - *Others*
+    - Animations
     - Activate calculator at address bar
-    - Smooth Scrolling
     - Mouse pointer for each context
+
+@@html:</details>@@
 
 ** Installation Guide
 
@@ -91,7 +118,7 @@
    bash -c "$(curl -fsSL https://raw.githubusercontent.com/black7375/Firefox-UI-Fix/master/install.sh)"
    #+END_SRC
 
-   Windows users: Run powershell as administrator
+Windows users: Run with powershell ([[https://github.com/black7375/Firefox-UI-Fix/wiki/Compatibility-Issues-Solution#windows-7-powershell-script-not-works][Does not work at Win7?]])
    #+BEGIN_SRC powershell
    Powershell -c "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iwr https://raw.githubusercontent.com/black7375/Firefox-UI-Fix/master/install.ps1 -useb | iex"
    #+END_SRC
@@ -154,6 +181,15 @@
   - Proton
   - Lepton
 
+
+** Contributors
+
+Thanks to all contributors to this project for providing help and developing features!
+
+[[https://github.com/black7375/Firefox-UI-Fix/graphs/contributors][@@html:<img src="https://contrib.rocks/image?repo=black7375/Firefox-UI-Fix"/>@@]]
+
+A list of all contributors can be found in [[./CREDITS][CREDITS]].
+
 ** FAQ
 
   - *Black pixels around the selected tab bottom corners* \\
@@ -162,7 +198,8 @@
   Please follow the [[https://github.com/black7375/Firefox-UI-Fix/wiki/Installation-Guide][Installation Guide]], \\
   or set =about:config='s =svg.context-properties.content.enabled= to =true= .
 
-  - *Some panel menu items doesn't show* \\
+  - *The closed button and some panel menu icons are not visible.* \\
+    [[https://user-images.githubusercontent.com/77958663/130395848-7af58241-bbbf-4273-bb62-14382c44098d.png]]
     [[https://user-images.githubusercontent.com/25581533/120487528-93b40200-c3a5-11eb-98ad-3498beb9f38e.png]]
 
   Please follow the [[https://github.com/black7375/Firefox-UI-Fix/wiki/Installation-Guide][Installation Guide]], \\
@@ -173,5 +210,5 @@
     [[https://user-images.githubusercontent.com/25581533/123761424-5746c980-d8b1-11eb-9a0f-83fb305f9f08.png]]
     [[https://user-images.githubusercontent.com/25581533/123762962-d4bf0980-d8b2-11eb-8492-d497d330c72a.png]]
 
-  I didn't put all the icons like before.\\
-  [[https://user-images.githubusercontent.com/25581533/123602947-dd4b0d80-d7e8-11eb-93a6-2b263bdd99f7.png]]
+    I didn't put all the icons like before.\\
+    [[https://user-images.githubusercontent.com/25581533/123602947-dd4b0d80-d7e8-11eb-93a6-2b263bdd99f7.png]]
