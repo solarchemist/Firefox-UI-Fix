@@ -24,6 +24,16 @@
   }
 }
 
+/*= Subview button, Menu's right padding #597 ================================*/
+.subviewbutton.toolbaritem-combined-buttons:not([shortcut]),
+.subviewbutton.subviewbutton-nav:not([shortcut]),
+menu.subviewbutton {
+  padding-inline-end: 0 !important;
+}
+#allTabsMenu-allTabsView .subviewbutton.subviewbutton-nav:not([shortcut]) {
+  padding-inline-end: var(--arrowpanel-menuitem-padding-inline) !important; // #717
+}
+
 /*= Icon Fill Color ==========================================================*/
 :root:-moz-lwtheme {
   /* Auto create --lwt-toolbarbutton-icon-fill-attention, fix for nightly default theme
@@ -48,13 +58,13 @@ menu {
 /*= Remove Tab Border ========================================================*/
 @mixin _theme_removeTabBorder($options...) {
   %noneBorder {
-    /* Nigtly 96:  1px solid var(--tab-line-color, rgba(128,128,142,0.9)); */
+    /* Nightly 96:  1px solid var(--tab-line-color, rgba(128,128,142,0.9)); */
     border: unset !important;
   }
   @each $prefix, $postfix in $options {
     #TabsToolbar#{$prefix}
     #tabbrowser-tabs:not([noshadowfortests])
-      .tabbrowser-tab:is([visuallyselected="true"], [multiselected])
+      .tabbrowser-tab:is([visuallyselected], [multiselected])
       > .tab-stack
       > .tab-background#{$postfix} {
       @extend %noneBorder;
@@ -81,6 +91,13 @@ menu {
     outline: var(--focus-outline) !important;
   }
 }
+
+/*= Tab Separator Color ======================================================*/
+#TabsToolbar,
+#nav-bar {
+  --toolbarseparator-color: color-mix(in srgb, currentColor 20%, transparent); /* 60% at v105 */
+}
+
 
 /*= Light Weight Theme =======================================================*/
 /* Header Image */
@@ -109,6 +126,40 @@ menu {
 
 /* Navbar Border */
 #navigator-toolbox:-moz-lwtheme {
-  --tabs-border-color: rgba(0, 0, 0, 0.3); /* Legacy: v96 */
-  --lwt-tabs-border-color: rgba(0, 0, 0, 0.3);
+  --tabs-border-color: rgba(0, 0, 0, 0.4); /* Legacy: v96, (0, 0, 0, 0.3) -> (0, 0, 0, 0.4)  */
+  --lwt-tabs-border-color: rgba(0, 0, 0, 0.4);
+}
+
+/*= Findbar Border Color =====================================================*/
+html|input.findbar-textbox {
+  border: 1px solid var(--input-border-color, var(--toolbar-field-border-color, ThreeDShadow)) !important; /* Original: 1px solid var(--input-border-color, var(--toolbar-field-border-color)) */
+}
+
+/*= Drop Indicator Color #473 ================================================*/
+treechildren::-moz-tree-cell-text(primary, dropOn),
+treechildren::-moz-tree-drop-feedback,
+vbox[part="drop-indicator-bar"] > image[part="drop-indicator"] {
+  background-color: var(--button-primary-bgcolor, var(--focus-outline-color)) !important; /* Original: SelectedItem or AccentColor*/
+}
+
+#bookmarksPanel[lwt-sidebar="true"] {
+  --focus-outline-color: var(--in-content-focus-outline-color, AccentColor) !important;
+}
+
+/*= Firefox View Border #498 =================================================*/
+@mixin _firefox_view_border_remove() {
+  #tabbrowser-tabs {
+    border-inline-start: none !important;
+    padding-inline-start: var(--tab-overflow-pinned-tabs-width) !important;
+    margin-inline-start: 0 !important;
+  }
+}
+
+:root:not([privatebrowsingmode=temporary])[firefoxviewhidden] #firefox-view-button + {
+  @include _firefox_view_border_remove;
+}
+
+@include Option("userChrome.tab.static_separator") {
+  // #531
+  @include _firefox_view_border_remove;
 }

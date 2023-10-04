@@ -1,4 +1,4 @@
-@use 'true' as *;
+@use "true" as *;
 @use "../src/utils/list";
 
 // TODO: Need more tests..
@@ -17,6 +17,22 @@ $dupList: (ab cd efgh efgh efgh ijk);
     @include assert-equal(
       list.remove($dupList, "efgh"),
       (ab cd ijk)
+    );
+  }
+}
+
+@include test-module("Remove at list using list [fn]") {
+  @include test("simple") {
+    @include assert-equal(
+      list.remove-list($simpleList, ("cd" "efgh")),
+      (ab ijk)
+    );
+  }
+
+  @include test("duplicate") {
+    @include assert-equal(
+      list.remove-list($dupList, ("cd" "efgh")),
+      (ab ijk)
     );
   }
 }

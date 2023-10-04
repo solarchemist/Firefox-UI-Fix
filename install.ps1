@@ -31,7 +31,7 @@ Shows this help message
 
 .PARAMETER WhatIf
 Runs the installer without actioning any file copies/moves
-Equivelant to a dry-run
+Equivalent to a dry-run
 
 .EXAMPLE
 PS> .\Install.ps1 -u -f C:\Users\someone\ff-profiles
@@ -390,6 +390,7 @@ $firefoxProfileDirPaths = @(
   "${HOME}\AppData\Roaming\Mozilla\Firefox",
   "${HOME}\AppData\Roaming\Waterfox",
   "${HOME}\AppData\Roaming\librewolf",
+  "${HOME}\AppData\Roaming\Ghostery Browser",
   "${HOME}\Desktop\Tor Browser\Browser\TorBrowser\Data\Browser"
 )
 
@@ -826,7 +827,7 @@ function Copy-Lepton() {
   Param (
     [Parameter(Position=0)]
     [string] $chromeDir = "chrome",
-    [Parameter(Position=0)]
+    [Parameter(Position=1)]
     [string] $userJSPath = "${chromeDir}\user.js"
   )
 

@@ -1,12 +1,13 @@
 /*= Proton Commons ===========================================================*/
-@-moz-document url("chrome://global/content/commonDialog.xhtml"),
-  url("chrome://pippki/content/editcacert.xhtml"),
-  url("chrome://pippki/content/deletecert.xhtml"),
-  url("chrome://pippki/content/exceptionDialog.xhtml"),
-  url("chrome://mozapps/content/downloads/unknownContentType.xhtml"),
-  url("chrome://global/content/appPicker.xhtml"),
-  url("chrome://browser/content/pageinfo/pageInfo.xhtml")
-{
+@include moz-document(
+  url "chrome://global/content/commonDialog.xhtml",
+  url "chrome://pippki/content/editcacert.xhtml",
+  url "chrome://pippki/content/deletecert.xhtml",
+  url "chrome://pippki/content/exceptionDialog.xhtml",
+  url "chrome://mozapps/content/downloads/unknownContentType.xhtml",
+  url "chrome://global/content/appPicker.xhtml",
+  url "chrome://browser/content/pageinfo/pageInfo.xhtml"
+) {
   /*- Overwrite --------------------------------------------------------------*/
   @include Dark {
     :root {
@@ -269,19 +270,21 @@
       background-color: var(--button-active-bgcolor, color-mix(in srgb, currentColor 20%, ButtonFace)) !important;
     }
     &:-moz-focusring {
-      outline: 2px solid var(--focus-outline-color, var(--uc-accent-color)) !important;
+      @include AccentColor {
+        outline: 2px solid var(--focus-outline-color, $accentColor) !important;
+      }
       outline-offset: var(--focus-outline-offset, 2px) !important;
     }
   }
 
   #label-box {
-    -moz-box-align: center !important;
-    -moz-box-pack: center !important;
+    @include BoxAlign("center", true);
+    @include BoxPack("center", true);
     font-weight: 600 !important;
   }
 
   dropmarker {
-    display: -moz-box !important;
+    @include Box(true);
     appearance: none !important;
     width: 12px !important;
     height: 12px !important;
@@ -483,7 +486,7 @@
       font-size: inherit !important;
     }
     xul|menulist::part(dropmarker) {
-      display: -moz-box;
+      @include Box;
       margin-block: 6px !important;
     }
     xul|menulist:-moz-focusring::part(label-box) {
@@ -498,7 +501,7 @@
     }
 
     xul|menulist::part(dropmarker) {
-      display: -moz-box !important;
+      @include Box(true);
       margin-block: 1px !important;
     }
 

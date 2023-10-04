@@ -21,41 +21,13 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Node cache
-        id: node-cache
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Package Install
-        if: steps.node-cache.outputs.cache-hit != 'true'
-        run: yarn install
+      - name: Setup
+        uses: ./.github/actions/node-setup
 
       - name: Build
         run: yarn build
 
       - name: Test
         run: yarn test
-
-  prettier:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          # Make sure the actual branch is checked out when running on pull requests
-          ref: ${{ github.head_ref }}
-
-      - name: Prettify code
-        uses: creyD/prettier_action@v4.1.1
-        with:
-          # This part is also where you can pass other options, for example:
-          prettier_options: --write .
-          only_changed: True
-          commit_message: "Clean: Prettified Code!"

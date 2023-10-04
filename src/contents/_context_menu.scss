@@ -1,6 +1,8 @@
-@-moz-document url("chrome://browser/content/places/places.xhtml"),
-               url("about:downloads") {
-  @import "../icons/layout_menu_contents";
+@include moz-document(
+  url "chrome://browser/content/places/places.xhtml",
+  url "about:downloads"
+) {
+  @import "../icons/layout/menu_contents";
 
   /*= Context Menu ===========================================================*/
   @include Option("userChrome.icon.context_menu") {
@@ -10,5 +12,11 @@
   }
   @include Option("userChrome.icon.global_menu") {
     @import "../icons/library";
+  }
+}
+
+@include moz-document(url-prefix "about:addons") {
+  @include Option("userChrome.icon.context_menu") {
+    @import "../icons/addon_page";
   }
 }

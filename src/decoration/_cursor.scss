@@ -21,13 +21,16 @@ menuitem.openintabs-menuitem,
 #protections-popup-footer .protections-popup-footer-button,
 #protections-popup-multiView .panel-subview-footer-button,
 #identity-popup-clear-sitedata-button,
-#identity-popup-more-info {
+#identity-popup-more-info,
+#unified-extensions-manage-extensions,
+.unified-extensions-item-open-menu,
+.unified-extensions-item-menu-button.subviewbutton,
+#PopupAutoComplete > richlistbox > richlistitem[originaltype="insecureWarning"] > .ac-title > .ac-text-overflow-container > .ac-title-text {
   cursor: pointer !important;
 }
 
-/* TODO: For now, fxa-menu doesn't show any status.
-           (JS required, observe .syncNowBtn status)
-  #PanelUI-fxa-menu-syncnow-button[syncstatus="active"] {
-    cursor: progress !important;
-  }
-  */
+// TODO: For now, fxa-menu doesn't show any status.
+//          (JS required, observe .syncNowBtn status)
+// #PanelUI-fxa-menu-syncnow-button[syncstatus="active"] {
+//   cursor: progress !important;
+// }

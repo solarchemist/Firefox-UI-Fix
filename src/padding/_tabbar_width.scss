@@ -1,15 +1,39 @@
 /* Titlebar Space */
-.titlebar-spacer[type="pre-tabs"] {
-  width: 30px !important; /* Original: 40px */
+:root {
+  --uc-title-pre-spacer: 30px; /* Original: 40px */
+  --uc-title-post-spacer: 25px; /* Original: 40px */
+  &:-moz-locale-dir(rtl) {
+    --uc-title-pre-spacer: 25px;
+    --uc-title-post-spacer: 30px;
+  }
 }
-.titlebar-spacer[type="post-tabs"] {
-  width: 25px !important; /* Original: 40px */
+@include WindowControl_Left {
+  .titlebar-spacer[type="pre-tabs"] {
+    width: var(--uc-title-pre-spacer) !important;
+  }
+  .titlebar-spacer[type="post-tabs"] {
+    width: var(--uc-title-post-spacer) !important;
+  }
+}
+@include WindowControl_Right {
+  .titlebar-spacer[type="pre-tabs"] {
+    width: var(--uc-title-post-spacer) !important;
+  }
+  .titlebar-spacer[type="post-tabs"] {
+    width: var(--uc-title-pre-spacer) !important;
+  }
 }
 
 /* Tabbar Buttons */
 :root {
   --newtab-button-minus-width-padding: 2px;
   --newtab-button-width-padding: calc(var(--toolbarbutton-inner-padding) - var(--newtab-button-minus-width-padding));
+}
+#widget-overflow-mainView {
+  #new-tab-button,
+  #alltabs-button {
+    --newtab-button-width-padding: 0px;
+  }
 }
 #new-tab-button > .toolbarbutton-icon,
 #alltabs-button > .toolbarbutton-badge-stack {
@@ -24,14 +48,14 @@
 @include NotOption("userChrome.tab.photon_like_padding") {
   #tabbrowser-tabs[haspinnedtabs]:not([positionpinnedtabs])
     > #tabbrowser-arrowscrollbox
-    > .tabbrowser-tab[first-visible-unpinned-tab] {
+    > .tabbrowser-tab:is([first-visible-unpinned-tab], :nth-child(1 of :not([pinned], [hidden]))) {
     margin-inline-start: 1px !important;
   }
 }
 @include Option("userChrome.tab.photon_like_padding") {
   #tabbrowser-tabs[haspinnedtabs]:not([positionpinnedtabs])
     > #tabbrowser-arrowscrollbox
-    > .tabbrowser-tab[first-visible-unpinned-tab] {
+    > .tabbrowser-tab:is([first-visible-unpinned-tab], :nth-child(1 of :not([pinned], [hidden]))) {
     margin-inline-start: 0 !important;
   }
 }
@@ -55,14 +79,15 @@
 }
 
 /* Tab - Max Size */
-@include NotOption("userChrome.tab.photon_like_padding") {
-  :root {
+:root {
+  @include NotOption("userChrome.tab.photon_like_padding") {
     --tab-max-width: 240px;
   }
-}
-@include Option("userChrome.tab.photon_like_padding") {
-  :root {
+  @include Option("userChrome.tab.photon_like_padding") {
     --tab-max-width: 225px;
+  }
+  @include OneLiner {
+    --tab-max-width: 180px;
   }
 }
 .tabbrowser-tab[fadein]:not([pinned]):not([style*="max-width"]) {
@@ -70,14 +95,31 @@
 }
 
 /* neighbouring tabs should "pinch" together */
+#tabbrowser-tabs:not([hasadjacentnewtabbutton]):not([overflow="true"])
+  > #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery {
+  min-width: 3px; // With Panorama Tab Groups #643
+}
 @include NotOption("userChrome.tab.photon_like_padding") {
   @include Option("userChrome.tab.lepton_like_padding") {
     .tabbrowser-tab {
-      padding-inline: 1px !important;
+      // Original: padding-inline 2px, margin-inline 0px #643
+      &[pinned] {
+        padding-inline: 1px !important;
+      }
+      &:not([pinned]) {
+        &:not(:first-of-type) {
+          margin-inline: -1px !important;
+        }
+        &:first-of-type {
+          margin-inline-end: -1px !important;
+        }
+      }
     }
   }
-  .tabbrowser-tab:not([last-visible-tab]) {
-    margin-inline-end: -0.5px !important;
+  @include NotOption("userChrome.tabbar.multi_row") {
+    #TabsToolbar:not([multibar]) .tabbrowser-tab:not(:last-of-type) {
+      margin-inline-end: -2px !important;
+    }
   }
 }
 @include Option("userChrome.tab.photon_like_padding") {

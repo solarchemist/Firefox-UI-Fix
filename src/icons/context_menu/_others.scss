@@ -1,3 +1,15 @@
+/*= Notification =============================================================*/
+// https://github.com/mozilla/gecko-dev/blob/master/toolkit/components/alerts/alert.xhtml
+#doNotDisturbMenuItem {
+  --menuitem-image: url(chrome://global/skin/media/pause-fill.svg);
+}
+#disableForOriginMenuItem {
+  --menuitem-image: url("chrome://global/skin/icons/blocked.svg");
+}
+#openSettingsMenuItem {
+  --menuitem-image: url("chrome://global/skin/icons/settings.svg");
+}
+
 /*= blockedPopupOptions ======================================================*/
 #blockedPopupAllowSite {
   --menuitem-image: url("chrome://global/skin/icons/check.svg");
@@ -8,6 +20,11 @@
 #blockedPopupDontShowMessage {
   /* checkbox */
   --menuitem-image: url("chrome://global/skin/icons/blocked.svg");
+}
+
+menuitem[data-l10n-id="popup-show-popup-menuitem"] {
+  /* checkbox */
+  --menuitem-image: url("../icons/eye-show.svg");
 }
 
 /*= autohide-context =========================================================*/
@@ -30,7 +47,7 @@
   &.manageExtensionItem {
     --menuitem-image: url("chrome://global/skin/icons/settings.svg");
   }
-  .removeExtensionItem {
+  &.removeExtensionItem {
     --menuitem-image: url("chrome://global/skin/icons/delete.svg");
   }
 }
@@ -138,6 +155,9 @@
   --menuitem-image: url("chrome://browser/skin/edit-paste.svg");
 }
 #paste-and-go {
+  @include Option("userChrome.icon.menu.full") {
+    --menuitem-image: url("../icons/edit-paste-go.svg");
+  }
 }
 #urlbar-input-container .textbox-contextmenu menuitem[cmd="cmd_delete"] {
   --menuitem-image: url("chrome://global/skin/icons/delete.svg");
@@ -147,7 +167,7 @@
 }
 
 /*= textbox-contextmenu ======================================================*/
-/* Browser's Searchbar, Libray's Searchbar, Page Info */
+/* Browser's Searchbar, Library's Searchbar, Page Info */
 .textbox-contextmenu > menuitem[data-l10n-id="text-action-undo"] {
   --menuitem-image: url("../icons/undo.svg");
 }
@@ -175,6 +195,9 @@
 
 /* Only searchbar */
 menuitem.searchbar-paste-and-search {
+  @include Option("userChrome.icon.menu.full") {
+    --menuitem-image: url("../icons/edit-paste-search.svg");
+  }
 }
 menuitem.searchbar-clear-history {
   --menuitem-image: url("chrome://browser/skin/forget.svg");
@@ -202,5 +225,33 @@ menuitem.searchbar-clear-history {
   }
   &:not([clientType]) {
     --menuitem-image: url("chrome://global/skin/icons/settings.svg");
+  }
+}
+#treestyletab_piro_sakura_ne_jp-menuitem-_context_sendTabsToDevice\:manage {
+  --menuitem-image: url("chrome://global/skin/icons/settings.svg");
+}
+
+/*= unified-extensions-context-menu ==========================================*/
+.unified-extensions-context-menu-pin-to-toolbar {
+  --menuitem-image: url("../icons/pin-tab.svg");
+}
+
+.unified-extensions-context-menu-manage-extension {
+  --menuitem-image: url("chrome://global/skin/icons/settings.svg");
+}
+.unified-extensions-context-menu-remove-extension {
+  --menuitem-image: url("chrome://global/skin/icons/delete.svg");
+}
+.unified-extensions-context-menu-report-extension {
+  --menuitem-image: url("../icons/send.svg");
+}
+
+/*= urlbarView-result-menu ===================================================*/
+.urlbarView-result-menuitem {
+  &[data-command="dismiss"] {
+    --menuitem-image: url("chrome://global/skin/icons/delete.svg");
+  }
+  &[data-command="help"] {
+    --menuitem-image: url("chrome://global/skin/icons/info.svg");
   }
 }

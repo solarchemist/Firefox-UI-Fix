@@ -6,6 +6,11 @@
   * [Cross Platform](#cross-platform)
   * [Firefox Version](#firefox-version)
   * [Side Effect](#side-effect)
+  * [RTL](#rtl)
+  * [`-moz-accent-color`](#-moz-accent-color)
+  * [Fork Browsers](#fork-browsers)
+  * [Add-ons](#add-ons)
+  * [SCSS](#scss)
 - [Internals](#internals)
   * [CSS Loading Order](#css-loading-order)
   * [DOM structure cannot be modified](#dom-structure-cannot-be-modified)
@@ -35,6 +40,8 @@ Complex UI emulation is quite tricky. [[Linux's Proton UI Library Chrome](https:
 
 [Bookmark menu](https://github.com/black7375/Firefox-UI-Fix/issues/136) is also similar example([code](https://github.com/black7375/Firefox-UI-Fix/blob/36e9c94844fee2417662251cbd50c2b874d5b576/userChrome.css#L4745-L4840)).
 
+In the case of the Mac native menu, there may be a menu that [cannot be displayed icon or added at the OS level](https://github.com/black7375/Firefox-UI-Fix/issues/699).
+
 ### Firefox Version
 There may be changes that change by version of Firefox.
 
@@ -51,8 +58,19 @@ This project is using SCSS to make a [reusable compatible mixins](../src/utils).
 }
 ```
 
+**Main compatibility bugs**
+
+- `-moz-toolbar-prefers-color-scheme` -> `prefers-color-scheme` [#250](https://github.com/black7375/Firefox-UI-Fix/issues/250)
+- `:root[lwtheme-mozlightdark]` is removed [#288](https://github.com/black7375/Firefox-UI-Fix/issues/288)
+- `-moz-os-version` -> `-moz-platform` [#331](https://github.com/black7375/Firefox-UI-Fix/issues/331)
+- Breaking change with `-moz-accent-color`/`-moz-accent-color-foreground` -> `AccentColor`/`AccentColorText` [#433](https://github.com/black7375/Firefox-UI-Fix/issues/433)
+- `-moz-box` to `flex` layout [#670](https://github.com/black7375/Firefox-UI-Fix/issues/670)
+- Drop `windows7` and `windows8`[#744](https://github.com/black7375/Firefox-UI-Fix/issues/744)
+  - `-moz-platform: windows-win7`, `-moz-platform: windows-win8`, `-moz-platform: windows-win10`, `-moz-windows-non-native-menus`
+
 ### Side Effect
-Only CSS modifications can cause bugs that are hard to think of in the general web, such as the [context menu not appearing](https://github.com/black7375/Firefox-UI-Fix/issues/114).
+Only CSS modifications can cause bugs that are hard to think of in the general web, such as the [context menu not appearing](https://github.com/black7375/Firefox-UI-Fix/issues/114).  
+Sometimes there are times when there is a really hard to understand. [#503](https://github.com/black7375/Firefox-UI-Fix/issues/503#issuecomment-1312685684)
 
 Especially be careful when customizing XUL elements.  
 The following code will cause extension panels fail to open and trying to open them might even crash Firefox. ([@MrOtherGuy](https://www.reddit.com/r/FirefoxCSS/comments/u1mdld/comment/i4eg29n/?utm_source=share&utm_medium=web2x&context=3) reports)
@@ -63,16 +81,74 @@ The following code will cause extension panels fail to open and trying to open t
 ```
 Info: `#nav-bar` is [`toolbar`](https://udn.realityripple.com/docs/Archive/Mozilla/XUL/toolbar).
 
-Another `display: flex`'s side effect examples. [#368](https://github.com/black7375/Firefox-UI-Fix/issues/368) [#372](https://github.com/black7375/Firefox-UI-Fix/issues/372)
+Another `display: flex`'s side effect examples. [#368](https://github.com/black7375/Firefox-UI-Fix/issues/368) [#372](https://github.com/black7375/Firefox-UI-Fix/issues/372)  
+After FF `v107`, breakage due to `-moz-box` may occur.
+
+- [Bug 1783934 - Add a way to incrementally migrate -moz-box layout to modern flexbox](https://bugzilla.mozilla.org/show_bug.cgi?id=1783934)
+- [Bug 1790616 - Use modern flexbox in the browser toolbox.](https://bugzilla.mozilla.org/show_bug.cgi?id=1790616)
+
+### RTL
+
+It can be detected using [`:-moz-locale-dir(rtl)`](https://developer.mozilla.org/en-US/docs/Web/CSS/:-moz-locale-dir(rtl)) on the interface(chrome) and [`:dir(rtl)`](https://developer.mozilla.org/en-US/docs/Web/CSS/:dir) on the content.
+
+[`margin-inline`](https://developer.mozilla.org/en-US/docs/Web/CSS/margin-inline) and [`padding-inline`](https://developer.mozilla.org/en-US/docs/Web/CSS/padding-inline) works as desired, but [`background-position-x`](https://developer.mozilla.org/en-US/docs/Web/CSS/background-position-x) and [`translateX()`](https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/translateX) should use the opposite values.
+
+### `-moz-accent-color`
+
+I don't know the exact reason, but it can be a problem if it is not applied to [CSS Variable](https://developer.mozilla.org/en-US/docs/Web/CSS/var). [#437](https://github.com/black7375/Firefox-UI-Fix/issues/437)
+
+### Fork Browsers
+
+Fork browsers have a different installation location ([bash](https://github.com/black7375/Firefox-UI-Fix/blob/2e87567b662922810d53959e46084b78f330f54e/install.sh#L336-L353), [powershell](https://github.com/black7375/Firefox-UI-Fix/blob/2e87567b662922810d53959e46084b78f330f54e/install.ps1#L387-L395)), and there may be a menu that Firefox does not have.
+
+List of fork browsers supported by this project:
+- [Waterfox](https://www.waterfox.net/)
+- [Floorp](https://floorp.app/)
+- [LibreWolf](https://librewolf.net/)
+- [Tor Browser](https://www.torproject.org/download/)
+- [Pulse Browser](https://pulsebrowser.app/)
+- [Firedragon](https://dr460nf1r3.org/projects/firedragon/)
+- [Ghostery Broser](https://www.ghostery.com/dawn)
+
+### Add-ons
+
+**Web extentions**
+
+You can apply [Web extentions](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions)'s context menu icons.
+
+At this time, we recommend that the [explicit ID](https://extensionworkshop.com/documentation/develop/extensions-and-the-add-on-id/) is set.  
+If not, an anonymous ID is created in the local, so you need a [UUID replacer](https://github.com/overdodactyl/ShadowFox/blob/master/scripts/uuids.sh).
+
+List of web extentions supported by this project:
+- [Tree Style Tab](https://addons.mozilla.org/en-US/firefox/addon/tree-style-tab/)
+- [Tab Center Reborn](https://addons.mozilla.org/en-US/firefox/addon/tabcenter-reborn/)
+- [Sidebar Tabs](https://addons.mozilla.org/en-US/firefox/addon/sidebartabs/)
+
+**Legacy Addons**
+
+We should consider [Legacy addons](https://extensionworkshop.com/documentation/develop/porting-a-legacy-firefox-extension/), not web extentions.
+
+Legacy addons can be loaded by [Auto config's feature](./Preference.md#auto-config) or [bootstrapLoder](https://github.com/xiaoxiaoflood/firefox-scripts/tree/master/extensions/bootstrapLoader) and can directly manipulate the DOM structure and style. [onemen/TabMixPlus#168](https://github.com/onemen/TabMixPlus/issues/168)
+
+List of legacy addons supported by this project:
+- [Tab Mix Plus](https://github.com/onemen/TabMixPlus)
+
+### SCSS
+
+Due to [various compatibility](#firefox-version) and [option dependency](https://github.com/black7375/Firefox-UI-Fix/wiki/Options) requirements, we are using a CSS preprocessor, [SCSS](https://sass-lang.com/).
+
+[`-moz-document`](https://developer.mozilla.org/en-US/docs/Web/CSS/@document) has been [deprecated in SCSS](https://sass-lang.com/documentation/breaking-changes/moz-document), and displays a lot of warnings.
+
+Unlike normal cases, this project works because it is [at the UA sheet level](https://bugzilla.mozilla.org/show_bug.cgi?id=1035091), and we have to [hide warnings](https://github.com/black7375/Firefox-UI-Fix/commit/300d3d9c77108520c3757a8898819d8af6a00c62) to show other critical errors.
 
 ## Internals
 ### CSS Loading Order
-User CSS(`userChrome.css`, `userContent.css`) is usually loaded first.
+User CSS (`userChrome.css`, `userContent.css`) is usually loaded first.
 
-In many cases, overriding should be prevented with [`important!`](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity#the_!important_exception)(Anti-pattern in general web), and side effects should also be considered. [#11](https://github.com/black7375/Firefox-UI-Fix/issues/11)
+In many cases, overriding should be prevented with [`!important`](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity#the_!important_exception) (Anti-pattern in general web), and side effects should also be considered. [#11](https://github.com/black7375/Firefox-UI-Fix/issues/11)
 
 ### DOM structure cannot be modified
-It is possible with [JS(Autoconfig)](./Preference.md#auto-config), but there are security and configuration issues, so we should make the most of CSS.
+It is possible with [JS (Auto config)](./Preference.md#auto-config), but there are security and configuration issues, so we should make the most of CSS.
 
 [`::before`](https://developer.mozilla.org/en-US/docs/Web/CSS/::before) and [`::after`](https://developer.mozilla.org/en-US/docs/Web/CSS/::after) can indirectly add CSS elements.
 
@@ -81,7 +157,7 @@ Many implementations using `::before`, `::after`.
 - [Dynamic Tab Separator](https://github.com/black7375/Firefox-UI-Fix/blob/36e9c94844fee2417662251cbd50c2b874d5b576/userChrome.css#L3394-L3457)
 - [Static Tab Separator](https://github.com/black7375/Firefox-UI-Fix/blob/0f78a73b856e1335954ecded93d377b85134bd61/userChrome.css#L3387-L3428)
 - [Picture In Picture Indicator](https://github.com/black7375/Firefox-UI-Fix/blob/36e9c94844fee2417662251cbd50c2b874d5b576/userChrome.css#L3716-L3753)
-- [Contaner Indicator](https://github.com/black7375/Firefox-UI-Fix/blob/36e9c94844fee2417662251cbd50c2b874d5b576/userChrome.css#L3754-L3852)
+- [Container Indicator](https://github.com/black7375/Firefox-UI-Fix/blob/36e9c94844fee2417662251cbd50c2b874d5b576/userChrome.css#L3754-L3852)
 
 For icons, [`list-style-image`](https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-image) and [`background-image`](https://developer.mozilla.org/en-US/docs/Web/CSS/background-image) are available.
 
@@ -92,7 +168,7 @@ It is recommended to use `list-style-image` when a layout is provided for the im
 - [Menu Item Icon](https://github.com/black7375/Firefox-UI-Fix/blob/36e9c94844fee2417662251cbd50c2b874d5b576/userChrome.css#L4551-L4744)
 - [Error Illustration](https://github.com/black7375/Firefox-UI-Fix/blob/36e9c94844fee2417662251cbd50c2b874d5b576/userContent.css#L275-L380)
 
-You can use [`-moz-box-ordinal-group`](https://udn.realityripple.com/docs/Web/CSS/box-ordinal-group)([`-moz-box`](https://udn.realityripple.com/docs/Web/CSS/Mozilla_Extensions#display)) and [`order`](https://developer.mozilla.org/en-US/docs/Web/CSS/order)(at [flex](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Basic_Concepts_of_Flexbox)) to change the order of the layout.  
+You can use [`-moz-box-ordinal-group`](https://udn.realityripple.com/docs/Web/CSS/box-ordinal-group) ([`-moz-box`](https://udn.realityripple.com/docs/Web/CSS/Mozilla_Extensions#display)) and [`order`](https://developer.mozilla.org/en-US/docs/Web/CSS/order) (at [flex](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Basic_Concepts_of_Flexbox)) to change the order of the layout.  
 In experience, the detailed actions of `-moz-box` and `flex` are different, so tests are required.
 - [Separator Order](https://github.com/black7375/Firefox-UI-Fix/blob/36e9c94844fee2417662251cbd50c2b874d5b576/userChrome.css#L4286-L4288)
 - [Sync Menu Item's Image Order](https://github.com/black7375/Firefox-UI-Fix/blob/36e9c94844fee2417662251cbd50c2b874d5b576/userChrome.css#L4234-L4238)
@@ -104,42 +180,42 @@ By default, [attribute selectors](https://developer.mozilla.org/en-US/docs/Web/C
 If there is no state attributes, you can bypass by using [both transitions and keyframes](https://github.com/black7375/Firefox-UI-Fix/blob/36e9c94844fee2417662251cbd50c2b874d5b576/userChrome.css#L2704-L2730) for animation.
 
 ### Shadow DOM
-Firefox actively uses [shadow dom](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM) internally.
+Firefox actively uses [shadow DOM](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM) internally.
 
 To modify, it is often a roundabout approach or impossible to inherit.
 
-Onething bypass method is to declare [`var()`](https://developer.mozilla.org/en-US/docs/Web/CSS/var) to shadow root.
+One bypass method is to declare [`var()`](https://developer.mozilla.org/en-US/docs/Web/CSS/var) to shadow root.
 - [Scrollbutton Padding](https://github.com/black7375/Firefox-UI-Fix/blob/36e9c94844fee2417662251cbd50c2b874d5b576/userChrome.css#L2906-L2924)
 - [Audio, Video Player UI](https://github.com/black7375/Firefox-UI-Fix/blob/36e9c94844fee2417662251cbd50c2b874d5b576/userContent.css#L5-L47)
 - [Video Player Twoline UI](https://github.com/black7375/Firefox-UI-Fix/blob/cbf14cd55a9edada7ab2f5f1b626608fb9fe38a2/src/contents/_video_player.scss#L68-L171): It is pretty difficult when the condition becomes complicated.
 
-Another limitation of shadow dom in user style is that you cannot use shadow dom related selectors like [`:host`](https://developer.mozilla.org/en-US/docs/Web/CSS/:host_function) and [`::part`](https://developer.mozilla.org/en-US/docs/Web/CSS/::part).
+Another limitation of shadow DOM in user style is that you cannot use shadow DOM related selectors like [`:host`](https://developer.mozilla.org/en-US/docs/Web/CSS/:host_function) and [`::part`](https://developer.mozilla.org/en-US/docs/Web/CSS/::part).
 
 - [Using ::part() selector in userchrome.css?](https://www.reddit.com/r/FirefoxCSS/comments/d2sukj/using_part_selector_in_userchromecss/)
 - [Can't change some shadow-dom properties](https://www.reddit.com/r/FirefoxCSS/comments/rebn3s/cant_change_some_shadowdom_properties/)
 - [Bug 1575507 - Shadow parts should work in user-origin stylesheets.](https://bugzilla.mozilla.org/show_bug.cgi?id=1575507)
 
 ### XUL
-Sometimes firefox can use [XUL](https://en.wikipedia.org/wiki/XUL) that have been written and binded with C++ for performance like a treeview of bookmarks.  
+Sometimes firefox can use [XUL](https://en.wikipedia.org/wiki/XUL) that have been written and bound with C++ for performance like a treeview of bookmarks.  
 XUL's [box model](https://udn.realityripple.com/docs/Archive/Mozilla/XUL/Tutorial/The_Box_Model) and [DOM](https://udn.realityripple.com/docs/Archive/Mozilla/XUL/Tutorial/Document_Object_Model) are different from HTML.
 
-There ar few appropriate documents, so we have to read the source code and work. (Ex. [1](https://github.com/mozilla/gecko-dev/blob/master/layout/style/nsCSSAnonBoxList.h), [2](https://github.com/mozilla/gecko-dev/blob/master/layout/xul/tree/nsITreeView.idl))
+There are a few appropriate documents, so we have to read the source code and work. (Ex. [1](https://github.com/mozilla/gecko-dev/blob/master/layout/style/nsCSSAnonBoxList.h), [2](https://github.com/mozilla/gecko-dev/blob/master/layout/xul/tree/nsITreeView.idl))
 
 Available CSS features are also restricted.
 
-Example of legacy documents that will help.
+Examples of legacy documents that will help:
 - [UDN: ::-moz-tree-cell](https://udn.realityripple.com/docs/Mozilla/Gecko/Chrome/CSS/::-moz-tree-cell)
 - [UDN: ::-moz-tree-cell-text](https://udn.realityripple.com/docs/Mozilla/Gecko/Chrome/CSS/::-moz-tree-cell-text)
 
 Another case.  
-Like [`<toolbar align="end"></toolbar>`](https://udn.realityripple.com/docs/Archive/Mozilla/XUL/Attribute/align), [`attributes`](https://udn.realityripple.com/docs/Archive/Mozilla/XUL/Attribute) is set and CSS of same property may not be appplied. (Ex. [`box-align: start`](https://udn.realityripple.com/docs/Web/CSS/box-align))
+Like [`<toolbar align="end"></toolbar>`](https://udn.realityripple.com/docs/Archive/Mozilla/XUL/Attribute/align), [`attributes`](https://udn.realityripple.com/docs/Archive/Mozilla/XUL/Attribute) is set and CSS of same property may not be applied. (Ex. [`box-align: start`](https://udn.realityripple.com/docs/Web/CSS/box-align))
 
 ### Supports
 [`@supports`](https://developer.mozilla.org/en-US/docs/Web/CSS/@supports) change in CSS is not detected in real time. (Caching after checking only once)  
 
-So a restart is required, and if the mozilla need real time changes, are using `@media` to handle it.
+So a restart is required, and if Mozilla needs real time changes, they are using `@media` to handle it.
 
-If project only use pure CSS, we cannot add `@media rules`.
+If project only uses pure CSS, we cannot add `@media rules`.
 
 - [Bug 1267890 - Support detecting bool preferences in chrome stylesheets](https://bugzilla.mozilla.org/show_bug.cgi?id=1267890)
 - [Bug 1698132 - Improve caching behaviour of -moz-bool-pref](https://bugzilla.mozilla.org/show_bug.cgi?id=1698132)

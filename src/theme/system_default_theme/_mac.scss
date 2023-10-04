@@ -12,15 +12,17 @@
     --mac-sidebar-hover-bgcolor: color-mix(in srgb, ButtonFace 60%, var(--mac-sidebar-bgcolor));
     --mac-hover-bgcolor: Window;
     --mac-disabled-bgcolor: transparent;
-    --mac-primary-button-color: var(--uc-accent-text-color); /* or -moz-mac-menutextselect */
-    --mac-accent-color: var(--uc-accent-color); /* or LinkText */
-    --mac-accent-content-color: color-mix(in srgb, rgb(255, 255, 255) 15%, var(--uc-accent-color));
-    --mac-accent-hover-color: color-mix(
-      in srgb,
-      rgb(0, 0, 0) 10%,
-      var(--uc-accent-color)
-    ); /* or -moz-mac-menuselect, Highlight */
-    --mac-accent-active-color: color-mix(in srgb, rgb(0, 0, 0) 20%, var(--uc-accent-color)); /* or ActiveBorder */
+    @include AccentColor {
+      --mac-primary-button-color: #{$accentTextColor}; /* or -moz-mac-menutextselect */
+      --mac-accent-color: #{$accentColor}; /* or LinkText */
+      --mac-accent-content-color: color-mix(in srgb, rgb(255, 255, 255) 15%, #{$accentColor});
+      --mac-accent-hover-color: color-mix(
+        in srgb,
+        rgb(0, 0, 0) 10%,
+        #{$accentColor}
+      ); /* or -moz-mac-menuselect, Highlight */
+      --mac-accent-active-color: color-mix(in srgb, rgb(0, 0, 0) 20%, #{$accentColor}); /* or ActiveBorder */
+    }
 
     /* Text, Icon Color */
     --menu-color: var(--mac-text-color) !important;
@@ -57,12 +59,12 @@
     --toolbar-bgcolor: var(--mac-selected-bgcolor) !important;
     --toolbar-non-lwt-bgcolor: var(--mac-selected-bgcolor) !important;
 
-    /* Field Backround Color */
+    /* Field Background Color */
     --input-bgcolor: var(--mac-field-bgcolor) !important;
     --toolbar-field-background-color: var(--mac-field-bgcolor) !important;
     --tab-icon-overlay-stroke: var(--mac-field-bgcolor) !important;
 
-    /* Panel Backround Color */
+    /* Panel Background Color */
     --arrowpanel-background: var(--mac-panel-bgcolor) !important;
 
     /* Hover Background Color  */
@@ -106,7 +108,7 @@
       --autocomplete-popup-separator-color: var(--mac-bgcolor) !important;
      */
 
-    /* Accent Color Forground */
+    /* Accent Color Foreground */
     --button-primary-color: var(--mac-primary-button-color) !important;
     --checkbox-checked-color: var(--mac-primary-button-color) !important;
 
@@ -235,13 +237,13 @@
       > #tabbrowser-arrowscrollbox
       > .tabbrowser-tab
       > .tab-stack
-      > .tab-background[selected="true"],
+      > .tab-background[selected],
     :root[style*="--lwt-accent-color: rgb(28, 27, 34); --lwt-text-color: rgba(251, 251, 254);"][lwt-default-theme-in-dark-mode]
       #tabbrowser-tabs:not([movingtab])
       > #tabbrowser-arrowscrollbox
       > .tabbrowser-tab
       > .tab-stack
-      > .tab-background[selected="true"] {
+      > .tab-background[selected] {
       background: color-mix(in srgb, rgb(255, 255, 255) 15%, -moz-dialog) !important;
     }
   }

@@ -67,7 +67,7 @@ mac_command_line_developer_tools() {
 
 check_git() {
   if ! [ -x "$(command -v git)" ]; then
-    if [ "${OSTYPE}" == "linux-gnu" ] || [ "${OSTYPE}" == "FreeBSD" ]; then
+    if [[ "${OSTYPE}" == "linux"* || "${OSTYPE}" == "FreeBSD" ]]; then
       pacapt_install
       sudo pacapt -S git
       pacapt_uninstall
@@ -185,8 +185,8 @@ write_file() {
 get_ini_section() {
   local filePath="$1"
 
-  local ouput=$(grep -E "^\[" "${filePath}" |sed -e "s/^\[//g" -e "s/\]$//g")
-  echo "${ouput}"
+  local output=$(grep -E "^\[" "${filePath}" |sed -e "s/^\[//g" -e "s/\]$//g")
+  echo "${output}"
 }
 get_ini_value() {
   local filePath="$1"
@@ -338,6 +338,7 @@ firefoxProfileDirPaths=(
   "${HOME}/.mozilla/firefox"
   "${HOME}/.waterfox"
   "${HOME}/.librewolf"
+  "${HOME}/.ghostery browser"
   "${HOME}/.pulse-browser"
   "${HOME}/.firedragon"
   "${HOME}/.local/opt/tor-browser/app/Browser/TorBrowser/Data/Browser"
@@ -346,6 +347,7 @@ firefoxProfileDirPaths=(
   "${HOME}/Library/Application Support/Firefox"
   "${HOME}/Library/Application Support/Waterfox"
   "${HOME}/Library/Application Support/libreWolf"
+  "${HOME}/Library/Application Support/Ghostery Browser"
   "${HOME}/Library/Application Support/pulse-browser"
   "${HOME}/Library/Application Support/TorBrowser/Browser"
 )
