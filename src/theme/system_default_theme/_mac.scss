@@ -5,10 +5,15 @@
     --mac-text-color: -moz-dialogtext;
     --mac-disabled-color: GrayText;
     --mac-bgcolor: Window;
-    --mac-selected-bgcolor: color-mix(in srgb, rgb(255, 255, 255) 15%, -moz-dialog);
+    --mac-selected-bgcolor: color-mix(in srgb, rgb(255, 255, 255) 15%, Field);
     --mac-field-bgcolor: Window;
     --mac-panel-bgcolor: Menu;
-    --mac-sidebar-bgcolor: -moz-mac-source-list;
+    @if mode.isSTANDARD() {
+        --mac-sidebar-bgcolor: Window; // TODO: -moz-sidebar;
+    }
+    @if mode.isESR() {
+      --mac-sidebar-bgcolor: -moz-mac-source-list;
+    }
     --mac-sidebar-hover-bgcolor: color-mix(in srgb, ButtonFace 60%, var(--mac-sidebar-bgcolor));
     --mac-hover-bgcolor: Window;
     --mac-disabled-bgcolor: transparent;
@@ -151,7 +156,7 @@
     --panelview-toolbarbutton-focus-box-shadow: inset 0 0 0 2px var(--focus-outline-color) !important;
   }
   @include Dark {
-    :root:not(:-moz-lwtheme),
+    :root#{$not_lwtheme},
     :root[lwt-default-theme-in-dark-mode] {
       --mac-field-bgcolor: Field;
       --mac-panel-bgcolor: -moz-CellHighlight;
@@ -166,7 +171,7 @@
     #{system-default-theme()} {
       --mac-proton-tab-selected-bgcolor: color-mix(in srgb, rgb(255, 255, 255) 20%, -moz-dialog);
     }
-    :root:not(:-moz-lwtheme) {
+    :root#{$not_lwtheme} {
       --tab-selected-color: var(--mac-proton-tab-selected-bgcolor) !important;
     }
     :root[lwt-default-theme-in-dark-mode] {
@@ -179,10 +184,14 @@
     background-color: var(--mac-bgcolor) !important;
   }
 
-  :root:not(:-moz-lwtheme) #titlebar {
+  :root#{$not_lwtheme} #titlebar,
+  :root#{$not_lwtheme} #toolbar-menubar,
+  :root#{$not_lwtheme} #TabsToolbar {
     --mac-hover-bgcolor: ButtonFace;
   }
-  #{selector.nest(system-default-theme(), "#titlebar")} {
+  #{selector.nest(system-default-theme(), "#titlebar")},
+  #{selector.nest(system-default-theme(), "#toolbar-menubar")},
+  #{selector.nest(system-default-theme(), "#TabsToolbar")} {
     --button-hover-bgcolor: var(--mac-hover-bgcolor);
     --button-active-bgcolor: var(--mac-hover-bgcolor);
     --toolbarbutton-hover-background: var(--mac-hover-bgcolor);

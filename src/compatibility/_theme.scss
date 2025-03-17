@@ -34,16 +34,8 @@ menu.subviewbutton {
   padding-inline-end: var(--arrowpanel-menuitem-padding-inline) !important; // #717
 }
 
-/*= Icon Fill Color ==========================================================*/
-:root:-moz-lwtheme {
-  /* Auto create --lwt-toolbarbutton-icon-fill-attention, fix for nightly default theme
-       Default Color: rgb(0,97,224) -> rgb(0, 120, 215) for more light
-     */
-  --lwt-toolbarbutton-icon-fill-attention: var(--button-primary-bgcolor, rgb(0, 120, 215));
-}
-
 /*= First visible tab margin at maximized #332 ===============================*/
-:root[tabsintitlebar="true"][sizemode="maximized"] #TabsToolbar {
+:root:is([tabsintitlebar="true"], [customtitlebar="true"])[sizemode="maximized"] #TabsToolbar {
   margin-left: -1px;
 }
 
@@ -56,35 +48,36 @@ menu {
 }
 
 /*= Remove Tab Border ========================================================*/
-@mixin _theme_removeTabBorder($options...) {
-  %noneBorder {
-    /* Nightly 96:  1px solid var(--tab-line-color, rgba(128,128,142,0.9)); */
-    border: unset !important;
-  }
-  @each $prefix, $postfix in $options {
-    #TabsToolbar#{$prefix}
-    #tabbrowser-tabs:not([noshadowfortests])
-      .tabbrowser-tab:is([visuallyselected], [multiselected])
-      > .tab-stack
-      > .tab-background#{$postfix} {
-      @extend %noneBorder;
-    }
-  }
+@mixin noneBorder {
+  /* Nightly 96:  1px solid var(--tab-line-color, rgba(128,128,142,0.9)); */
+  border: unset !important;
 }
 
 @include Option("userChrome.tab.connect_to_window") {
   /* TARGET: original, photon */
-  @include _theme_removeTabBorder(
-    // Light Theme
-    ":not([brighttext])",
+  // Light Theme
+  #TabsToolbar:not([brighttext])
+    #tabbrowser-tabs:not([noshadowfortests])
+    .tabbrowser-tab:is([visuallyselected], [multiselected])
+    > .tab-stack
+    > .tab-background {
+    @include noneBorder;
+  }
+  @include lwtheme {
     // Dark Theme
-    "[brighttext]" ":-moz-lwtheme"
-  );
+    #TabsToolbar[brighttext]
+      #tabbrowser-tabs:not([noshadowfortests])
+      .tabbrowser-tab:is([visuallyselected], [multiselected])
+      > .tab-stack
+      > .tab-background {
+      @include noneBorder;
+    }
 
-  #TabsToolbar #firefox-view-button[open] > .toolbarbutton-icon:-moz-lwtheme,
-  .tab-background[selected]:-moz-lwtheme {
-    // Nightly 102: outline: 1px solid var(--lwt-tab-line-color, var(--lwt-tabs-border-color, currentColor));
-    outline-color: transparent !important;
+    #TabsToolbar #firefox-view-button[open] > .toolbarbutton-icon,
+    .tab-background[selected] {
+      // Nightly 102: outline: 1px solid var(--lwt-tab-line-color, var(--lwt-tabs-border-color, currentColor));
+      outline-color: transparent !important;
+    }
   }
   .keyboard-focused-tab > .tab-stack > .tab-background,
   .tabbrowser-tab:focus:not([aria-activedescendant]) > .tab-stack > .tab-background {
@@ -101,10 +94,18 @@ menu {
 
 /*= Light Weight Theme =======================================================*/
 /* Header Image */
-:root[lwtheme-image] {
+:root[lwtheme-image] > body {
+  // Linux compatibility:
+  // :root[tabsintitlebar][sizemode="normal"]:not([gtktiledwindow="true"]) {
+  //    appearance: auto;
+  // }
   background-image: var(--lwt-header-image) !important; /* Original: var(--lwt-header-image) */
   background-repeat: no-repeat !important;
   background-position: right top !important;
+  background-color: var(--lwt-accent-color, Window) !important;
+  &:-moz-window-inactive {
+    background-color: var(--lwt-accent-color-inactive, var(--lwt-accent-color)) !important;
+  }
 
   // For high-resolution screen's image ratio
   @media (min-width: 2500px) {
@@ -116,18 +117,35 @@ menu {
   }
 
   // lwtheme compatibility
-  #navigator-toolbox:-moz-lwtheme {
-    background-image: var(--lwt-header-image), var(--lwt-additional-images) !important;
-    background-repeat: var(--lwt-background-tiling) !important;
-    background-position: var(--lwt-background-alignment) !important;
-    background-color: unset !important; /* Original:  var(--lwt-accent-color) */
+  @include lwtheme {
+    #navigator-toolbox {
+      background-image: var(--lwt-header-image), var(--lwt-additional-images) !important;
+      background-repeat: var(--lwt-background-tiling) !important;
+      background-position: var(--lwt-background-alignment) !important;
+      background-color: unset !important; /* Original:  var(--lwt-accent-color) */
+    }
   }
 }
 
 /* Navbar Border */
-#navigator-toolbox:-moz-lwtheme {
-  --tabs-border-color: rgba(0, 0, 0, 0.4); /* Legacy: v96, (0, 0, 0, 0.3) -> (0, 0, 0, 0.4)  */
-  --lwt-tabs-border-color: rgba(0, 0, 0, 0.4);
+@include lwtheme {
+  #navigator-toolbox {
+    --tabs-border-color: rgba(0, 0, 0, 0.4); /* Legacy: v96, (0, 0, 0, 0.3) -> (0, 0, 0, 0.4)  */
+    --lwt-tabs-border-color: rgba(0, 0, 0, 0.4);
+  }
+}
+
+#main-window {
+  background-color: WindowFrame !important;
+}
+:root[lwtheme][lwtheme-image] #customization-container {
+  background-image: none !important;
+}
+#customization-container {
+  background-color: transparent !important; /* Original: color-mix(in srgb, -moz-dialog 85%, white) */
+}
+:root:not([lwtheme]) #customization-container {
+  background-color: var(--toolbar-non-lwt-bgcolor) !important;
 }
 
 /*= Findbar Border Color =====================================================*/
@@ -162,4 +180,46 @@ vbox[part="drop-indicator-bar"] > image[part="drop-indicator"] {
 @include Option("userChrome.tab.static_separator") {
   // #531
   @include _firefox_view_border_remove;
+}
+
+/*= Menubar rounding #814 ====================================================*/
+#main-menubar {
+  --panel-border-radius: var(--arrowpanel-border-radius);
+}
+
+/*= Infobar Align #858 =======================================================*/
+.container.infobar {
+  align-items: center !important;
+}
+
+/*= Inactive transparent #882 ================================================*/
+:root:is([tabsintitlebar], [customtitlebar]) #titlebar:-moz-window-inactive,
+:root:is([tabsintitlebar], [customtitlebar]) #toolbar-menubar:-moz-window-inactive,
+:root:is([tabsintitlebar], [customtitlebar]) #TabsToolbar:-moz-window-inactive {
+  opacity: 1 !important;
+  color: color-mix(in srgb, currentColor calc(var(--inactive-titlebar-opacity, 0.75) * 100%), transparent) !important;
+  --inactive-toolbarbutton-icon-fill-opacity: calc(var(--toolbarbutton-icon-fill-opacity, 1) * var(--inactive-titlebar-opacity, 0.75));
+
+  .toolbarbutton-icon {
+    fill-opacity: var(--inactive-toolbarbutton-icon-fill-opacity, 1);
+  }
+}
+
+/*= Tabpreviw transparent #890 ===============================================*/
+#tab-preview-panel {
+  --panel-background: var(--arrowpanel-background) !important; /* Original: var(--tab-selected-bgcolor, var(--toolbar-bgcolor)) */
+  --panel-color: var(--arrowpanel-color) !important; /* Original: var(--tab-selected-textcolor, var(--toolbar-color)) */
+}
+
+/*= Design token =============================================================*/
+:root, :host {
+  --button-color: var(--button-text-color);
+  --button-bgcolor: var(--button-background-color);
+  --button-hover-bgcolor: var(--button-background-color-hover);
+  --button-active-bgcolor: var(--button-background-color-active);
+
+  --button-primary-color: var(--button-text-color-primary);
+  --button-primary-bgcolor: var(--button-background-color-primary);
+  --button-primary-hover-bgcolor: var(--button-background-color-primary-hover);
+  --button-primary-active-bgcolor: var(--button-background-color-primary-active);
 }

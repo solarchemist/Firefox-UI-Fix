@@ -185,7 +185,7 @@ write_file() {
 get_ini_section() {
   local filePath="$1"
 
-  local output=$(grep -E "^\[" "${filePath}" |sed -e "s/^\[//g" -e "s/\]$//g")
+  local output="$(grep -E "^\[" "${filePath}" |sed -e "s/^\[//g" -e "s/\]$//g")"
   echo "${output}"
 }
 get_ini_value() {
@@ -195,11 +195,11 @@ get_ini_value() {
 
   local output=""
   if [ "${section}" == "" ]; then
-    output=$(grep -E "^${key}" "${filePath}" | cut -f 2 -d"=")
+    output="$(grep -E "^${key}" "${filePath}" | cut -f 2 -d"=")"
     echo "${output}"
   else
     local sectionStart=""
-    for line in $(cat "${filePath}"); do
+    while IFS= read line; do
       if [[ "${sectionStart}" == "true" && "${line}" == "["* ]]; then
         return 0
       fi
@@ -209,12 +209,12 @@ get_ini_value() {
       fi
 
       if [ "${sectionStart}" == "true" ]; then
-        output=$(echo "${line}" | grep -E "^${key}" | cut -f 2 -d"=" )
+        output="$(echo "${line}" | grep -E "^${key}" | cut -f 2 -d"=" )"
         if [ "${output}" != "" ]; then
           echo "${output}"
         fi
       fi
-    done
+    done < "${filePath}"
   fi
 }
 
@@ -341,6 +341,7 @@ firefoxProfileDirPaths=(
   "${HOME}/.ghostery browser"
   "${HOME}/.pulse-browser"
   "${HOME}/.firedragon"
+  "${HOME}/.cachy"
   "${HOME}/.local/opt/tor-browser/app/Browser/TorBrowser/Data/Browser"
   "${HOME}/.var/app/org.mozilla.firefox/.mozilla/firefox"
   "${HOME}/snap/firefox/common/.mozilla/firefox"
@@ -543,7 +544,7 @@ write_lepton_info() {
     fi
     for key in "Type" "Branch" "Ver" "Path"; do
       eval "local value=\${${key}}"
-      output="${output}$(set_ini_value ${key} ${value})"
+      output="${output}$(set_ini_value "${key}" "${value}")"
     done
 
     # Latest element flushing

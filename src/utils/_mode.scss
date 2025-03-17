@@ -1,4 +1,5 @@
 $_osESR: false !default;
+$_pref: "support-bool-pref" !default; // "support-bool-pref" | "media-bool-pref" | "media-pref"
 
 @mixin ESR() {
   $_osESR: true !global;
@@ -8,10 +9,34 @@ $_osESR: false !default;
   $_osESR: false !global;
 }
 
+@mixin SUPPORT_BOOL_PREF() {
+  $_pref: "support-bool-pref" !global;
+}
+
+@mixin MEDIA_BOOL_PREF() {
+  $_pref: "media-bool-pref" !global;
+}
+
+@mixin MEDIA_PREF() {
+  $_pref: "media-pref" !global;
+}
+
 @function isESR() {
   @return $_osESR;
 }
 
 @function isSTANDARD() {
   @return not $_osESR;
+}
+
+@function isSupportBoolPref() {
+  @return isESR() and $_pref == "support-bool-pref";
+}
+
+@function isMediaBoolPref() {
+  @return isSTANDARD() and $_pref == "media-bool-pref";
+}
+
+@function isMediaPref() {
+  @return isSTANDARD() and $_pref == "media-pref";
 }

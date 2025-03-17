@@ -1,7 +1,7 @@
 /** Global Menu ***************************************************************/
 /*= menu_FilePopup ===========================================================*/
 #menu_newNavigatorTab {
-  --menuitem-image: url("chrome://browser/skin/new-tab.svg");
+  --menuitem-image: var(--uc-new-tab-icon);
 }
 #menu_newUserContext {
   --menuitem-image: url("../icons/container-openin-16.svg");
@@ -22,15 +22,19 @@
   --menuitem-image: url("../icons/toolbarButton-upload.svg");
 }
 #menu_close {
+  --menuitem-image: var(--uc-tab-close-icon);
 }
 #menu_closeWindow {
+  @include Option("userChrome.icon.menu.full") {
+    --menuitem-image: url("../icons/close-window.svg");
+  }
 }
 
 #menu_savePage {
   --menuitem-image: url("../icons/toolbarButton-download.svg");
 }
 #menu_sendLink {
-  --menuitem-image: url("chrome://browser/skin/mail.svg");
+  --menuitem-image: url("../icons/mail.svg");
 }
 menu.share-tab-url-item {
   --menuitem-image: url("chrome://browser/skin/share.svg");
@@ -70,13 +74,13 @@ menu.share-tab-url-item {
 }
 
 #menu_cut {
-  --menuitem-image: url("chrome://browser/skin/edit-cut.svg");
+  --menuitem-image: url("../icons/edit-cut.svg");
 }
 #menu_copy {
   --menuitem-image: url("../icons/edit-copy.svg");
 }
 #menu_paste {
-  --menuitem-image: url("chrome://browser/skin/edit-paste.svg");
+  --menuitem-image: url("../icons/edit-paste.svg");
 }
 #menu_delete {
   --menuitem-image: url("chrome://global/skin/icons/delete.svg");
@@ -90,6 +94,9 @@ menu.share-tab-url-item {
   --menuitem-image: url("chrome://global/skin/icons/search-glass.svg");
 }
 #menu_findAgain {
+  @include Option("userChrome.icon.menu.full") {
+    --menuitem-image: url("../icons/find-again.svg");
+  }
 }
 
 #textfieldDirection-swap {
@@ -115,7 +122,7 @@ menu.share-tab-url-item {
   --menuitem-image: url("../icons/document-css.svg");
 }
 #repair-text-encoding {
-  --menuitem-image: url("chrome://browser/skin/characterEncoding.svg");
+  --menuitem-image: url("../icons/characterEncoding.svg");
 }
 
 #enterFullScreenItem {
@@ -132,7 +139,7 @@ menu.share-tab-url-item {
   --menuitem-image: url("chrome://browser/skin/reader-mode.svg");
 }
 #menu_showAllTabs {
-  --menuitem-image: url("../icons/tab.svg");
+  --menuitem-image: var(--uc-tab-icon);
 }
 
 #documentDirection-swap {
@@ -177,7 +184,7 @@ menu.share-tab-url-item {
   --menuitem-image: url("chrome://browser/skin/history.svg");
 }
 #sanitizeItem {
-  --menuitem-image: url("chrome://browser/skin/forget.svg");
+  --menuitem-image: url("../icons/forget.svg");
 }
 
 #sync-tabs-menuitem {
@@ -193,7 +200,7 @@ menu.share-tab-url-item {
   --menuitem-image: url("chrome://global/skin/icons/search-glass.svg");
 }
 #historyUndoMenu {
-  --menuitem-image: url("chrome://browser/skin/tab.svg");
+  --menuitem-image: var(--uc-tab-icon);
 }
 #historyUndoWindowMenu {
   --menuitem-image: url("chrome://browser/skin/window.svg");
@@ -252,7 +259,7 @@ menu.share-tab-url-item {
 }
 
 #menu_openFirefoxView {
-  --menuitem-image: url("chrome://branding/content/icon32.png");
+  --menuitem-image: url("../icons/firefox-view.svg");
 }
 #webDeveloperMenu, /* Legacy */
 #browserToolsMenu {
@@ -282,7 +289,7 @@ menu.share-tab-url-item {
   --menuitem-image: url("../icons/command-frames.svg");
 }
 #menu_browserConsole {
-  --menuitem-image: url("chrome://devtools/skin/images/command-console.svg");
+  --menuitem-image: url("../icons/command-console.svg");
 }
 #menu_responsiveUI {
   /* checkbox */
@@ -290,13 +297,13 @@ menu.share-tab-url-item {
 }
 #menu_eyedropper {
   /* checkbox */
-  --menuitem-image: url("chrome://devtools/skin/images/command-eyedropper.svg");
+  --menuitem-image: url("../icons/command-eyedropper.svg");
 }
 #menu_pageSource {
   --menuitem-image: url("../icons/document-search.svg");
 }
 #extensionsForDevelopers {
-  --menuitem-image: url("chrome://devtools/skin/images/debugging-addons.svg");
+  --menuitem-image: url("chrome://mozapps/skin/extensions/extension.svg");
 }
 
 /*= windowPopup ==============================================================*/
@@ -312,6 +319,9 @@ menu.share-tab-url-item {
 /*= menu_HelpPopup ===========================================================*/
 #menu_openHelp {
   --menuitem-image: url("chrome://global/skin/icons/help.svg");
+}
+#help_reportBrokenSite {
+  --menuitem-image: url("chrome://global/skin/icons/lightbulb.svg");
 }
 #feedbackPage {
   --menuitem-image: url("../icons/send.svg");

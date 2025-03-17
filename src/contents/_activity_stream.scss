@@ -35,12 +35,32 @@
 
   /** Activity Stream - Web Site Icon: full size ******************************/
   @include Option("userContent.newTab.full_icon") {
-    .top-site-outer .tile {
-      overflow: hidden;
+    .top-site-outer {
+      width: 120px !important; /* v135: calc(var(--size-item-large) * 3); */
+
+      .tile {
+        width: 80px !important; /* v135: calc(var(--size-item-large) * 2); */
+        height: 80px !important; /* v135: calc(var(--size-item-large) * 2); */
+        overflow: hidden;
+      }
 
       .icon-wrapper {
         width: 100% !important; /* Original: 48px */
         height: 100% !important; /* Original: 48px */
+      }
+      &.add-button .tile .icon-wrapper {
+        width: 24px !important;
+        height: 24px !important;
+      }
+
+      .context-menu-button {
+        top: 0px !important; /* Original: -20px */
+        right: 0px !important;
+        width: 22px !important;
+        height: 22px !important;
+      }
+      .context-menu {
+        top: 16.75px !important; /* Original: 6.75px */
       }
     }
   }
@@ -99,7 +119,8 @@
   @include Option("userContent.newTab.pocket_to_last") {
     .body-wrapper.on {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: wrap !important;
+      flex-direction: row !important;
 
       > .discovery-stream.ds-layout {
         flex-basis: 100%;
